@@ -4,6 +4,7 @@ import { TypographyH2 } from "@/utils/typography";
 import { Loader2 } from "lucide-react";
 import { signIn } from "next-auth/react";
 import React, { useState } from "react";
+import { toast } from "sonner";
 
 const Page = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -13,6 +14,9 @@ const Page = () => {
     try {
       await signIn("google");
     } catch (error) {
+      toast.error("Something went wrong", {
+        description: "To click redo all thing for a minutes",
+      });
     } finally {
       setIsLoading(false);
     }
