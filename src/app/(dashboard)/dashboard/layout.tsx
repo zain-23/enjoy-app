@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { getServerSession } from "next-auth";
 import { authOption } from "@/utils/auth";
-import { User } from "@/types/types";
 import ProfileImage from "@/utils/ProfileImage";
 import SignOutButton from "@/utils/signOutButton";
 
@@ -41,9 +40,15 @@ export default async function Layout({
           <div className="flex h-full w-full max-w-xs flex-col gap-y-5 overflow-y-auto border-r px-6">
             <Link
               href={"/dashboard"}
-              className="flex h-16 flex-shrink-0 items-center"
+              className="w-full flex justify-center py-2"
             >
-              <Icons.Logo className="h-8 w-auto" />
+              <Image
+                src={"/chat-application-logo-removebg-preview.png"}
+                width={200}
+                height={200}
+                alt="logo"
+                className="w-20 h-20"
+              />
             </Link>
             <div className="text-xs font-semibold leading-6">Your Chats</div>
             <nav className="flex flex-1 flex-col">
