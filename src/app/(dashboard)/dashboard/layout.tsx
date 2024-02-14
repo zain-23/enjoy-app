@@ -64,10 +64,15 @@ export default async function Layout({
                       return (
                         <li key={menu.id} className="w-full">
                           <Button className="w-full">
-                            <span className="mr-4">
-                              <Icon className="h-4 w-4" />
-                            </span>
-                            <span className="truncate">{menu.name}</span>
+                            <Link
+                              href={menu.href}
+                              className="flex items-center"
+                            >
+                              <span className="mr-4">
+                                <Icon className="h-4 w-4" />
+                              </span>
+                              <span className="truncate">{menu.name}</span>
+                            </Link>
                           </Button>
                         </li>
                       );
