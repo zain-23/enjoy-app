@@ -33,6 +33,7 @@ export default async function Layout({
   children: React.ReactNode;
 }>) {
   const session = await getServerSession(authOption);
+
   return (
     <html lang="en" className="dark">
       <body className={inter.className}>

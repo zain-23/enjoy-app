@@ -32,9 +32,22 @@ const AddFriendButton = () => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof addFriendFormSchema>) => {
-    toast.success(`Your request is send with email :${values.email}`);
-    form.reset();
+  const onSubmit = async (values: z.infer<typeof addFriendFormSchema>) => {
+    console.log(values);
+
+    try {
+      const response = await fetch("/api/friends/add", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+        cache: "no-cache",
+      });
+
+      const resMessage = await response.json();
+      console.log(resMessage);
+    } catch (error) {}
   };
   return (
     <Card>
