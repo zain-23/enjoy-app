@@ -9,6 +9,9 @@ import { getServerSession } from "next-auth";
 import { authOption } from "@/utils/auth";
 import ProfileImage from "@/utils/ProfileImage";
 import SignOutButton from "@/utils/signOutButton";
+import FriendRequestSidebarOption from "@/utils/friendRequestSidebarOption";
+import { fetchRedis } from "@/helpers/redis";
+import { User } from "@/types/types";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -27,12 +30,19 @@ const sidebarOptions: SidebarOption[] = [
     Icon: "UserPlus",
   },
 ];
+
 export default async function Layout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   const session = await getServerSession(authOption);
+  const unSeenRequestCount = (
+    (await fetchRedis(
+      "smembers",
+      `user:${session?.user.id}:incoming_friend_requests`
+    )) as User[]
+  ).length;
 
   return (
     <html lang="en" className="dark">
@@ -79,6 +89,12 @@ export default async function Layout({
                       );
                     })}
                   </ul>
+                </li>
+                <li>
+                  <FriendRequestSidebarOption
+                    sessionId={session?.user.id!}
+                    initialUnSeenRequestCount={unSeenRequestCount}
+                  />
                 </li>
                 <li className="-mx-6 mt-auto flex items-center">
                   <div className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6">

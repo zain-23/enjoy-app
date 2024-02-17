@@ -43,7 +43,12 @@ const AddFriendButton = () => {
       });
 
       const resMessage = await response.json();
-      console.log(resMessage);
+
+      if (resMessage.error) {
+        toast.error(resMessage.message);
+      } else {
+        toast.success(resMessage.message);
+      }
     } catch (error) {
       console.log("error", error);
     }
