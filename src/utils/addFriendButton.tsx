@@ -18,7 +18,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -33,8 +32,6 @@ const AddFriendButton = () => {
   });
 
   const onSubmit = async (values: z.infer<typeof addFriendFormSchema>) => {
-    console.log(values);
-
     try {
       const response = await fetch("/api/friends/add", {
         method: "POST",
@@ -46,7 +43,6 @@ const AddFriendButton = () => {
       });
 
       const resMessage = await response.json();
-      console.log(resMessage);
     } catch (error) {}
   };
   return (
