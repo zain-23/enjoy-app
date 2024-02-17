@@ -43,7 +43,10 @@ const AddFriendButton = () => {
       });
 
       const resMessage = await response.json();
-    } catch (error) {}
+      console.log(resMessage);
+    } catch (error) {
+      console.log("error", error);
+    }
   };
   return (
     <Card>
