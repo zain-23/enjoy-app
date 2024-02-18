@@ -17,7 +17,6 @@ const FriendRequestSidebarOption: FC<FriendRequestSidebarOptionProps> = ({
   const [unSeenRequestCount, setUnSeenRequest] = useState<number>(
     initialUnSeenRequestCount
   );
-  console.log(unSeenRequestCount);
 
   return (
     <Button className="w-full">

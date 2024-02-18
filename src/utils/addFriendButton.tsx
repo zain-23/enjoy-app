@@ -22,8 +22,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { toast } from "sonner";
+import { useState } from "react";
+import { Loader2 } from "lucide-react";
 
 const AddFriendButton = () => {
+  const [loading, setLoading] = useState(false);
   const form = useForm<z.infer<typeof addFriendFormSchema>>({
     resolver: zodResolver(addFriendFormSchema),
     defaultValues: {
@@ -32,6 +35,7 @@ const AddFriendButton = () => {
   });
 
   const onSubmit = async (values: z.infer<typeof addFriendFormSchema>) => {
+    setLoading(true);
     try {
       const response = await fetch("/api/friends/add", {
         method: "POST",
@@ -42,15 +46,20 @@ const AddFriendButton = () => {
         cache: "no-cache",
       });
 
-      const resMessage = await response.json();
-
-      if (resMessage.error) {
-        toast.error(resMessage.message);
+      if (!response.ok) {
+        const strData = await response.text();
+        const parseData = JSON.parse(strData);
+        toast.error(parseData.error);
       } else {
-        toast.success(resMessage.message);
+        const strData = await response.text();
+        const parseData = JSON.parse(strData);
+        toast.success(parseData.message);
       }
     } catch (error) {
       console.log("error", error);
+    } finally {
+      setLoading(false);
+      form.reset();
     }
   };
   return (
@@ -80,7 +89,9 @@ const AddFriendButton = () => {
                 </FormItem>
               )}
             />
-            <Button type="submit">Submit</Button>
+            <Button type="submit" disabled={loading}>
+              {loading ? <Loader2 className="animate-spin" /> : "Submit"}
+            </Button>
           </form>
         </Form>
       </CardContent>
