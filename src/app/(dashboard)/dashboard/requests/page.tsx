@@ -1,11 +1,9 @@
 import { fetchRedis } from "@/helpers/redis";
-import { FriendRequest } from "@/types/request-table";
 import { User } from "@/types/types";
 import { authOption } from "@/utils/auth";
+import FriendRequest from "@/utils/friendRequest";
 import { getServerSession } from "next-auth";
 import { notFound } from "next/navigation";
-import { DataTable } from "./data-table";
-import { columns } from "./column";
 
 const Page = async () => {
   const session = await getServerSession(authOption);
@@ -15,9 +13,11 @@ const Page = async () => {
     "smembers",
     `user:${session.user.id}:incoming_friend_requests`
   )) as string[];
+
   const incomingFriendRequest = await Promise.all(
     incomingSendId.map(async (senderId) => {
-      const sender = (await fetchRedis("get", `user:${senderId}`)) as User;
+      const data = (await fetchRedis("get", `user:${senderId}`)) as string;
+      const sender = JSON.parse(data) as User;
 
       return {
         senderId,
@@ -26,42 +26,14 @@ const Page = async () => {
     })
   );
 
-  const data = await getData();
   return (
-    <div className="container mx-auto py-10">
-      <DataTable columns={columns} data={data} />
+    <div className="py-10 w-full">
+      <FriendRequest
+        incomingFriendRequests={incomingFriendRequest}
+        sessionId={session.user.id}
+      />
     </div>
   );
 };
 
 export default Page;
-
-async function getData(): Promise<FriendRequest[]> {
-  return [
-    {
-      id: "728ed52f",
-      status: "pending",
-      email: "m@example.com",
-    },
-    {
-      id: "728ed52f",
-      status: "pending",
-      email: "m@example.com",
-    },
-    {
-      id: "728ed52f",
-      status: "pending",
-      email: "m@example.com",
-    },
-    {
-      id: "728ed52f",
-      status: "pending",
-      email: "m@example.com",
-    },
-    {
-      id: "728ed52f",
-      status: "pending",
-      email: "m@example.com",
-    },
-  ];
-}
